@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Navbar from "./navbar/navbar";
-import HomeSection from "./home/homesection";
 import Banner from "./home/banner";
+import Categories from "./Categories/Categories";
 
 export default function Home() {
   return (
@@ -11,11 +11,12 @@ export default function Home() {
       {/* Import and use the Navbar component */}
       <Navbar />
       
-      {/* Home Section Component */}
-      <HomeSection />
       
       {/* Banner Component */}
       <Banner />
+      
+      {/* Categories Component */}
+      <Categories />
     </div>
   );
 }
