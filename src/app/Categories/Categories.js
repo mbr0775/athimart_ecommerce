@@ -11,18 +11,18 @@ const Categories = () => {
   }, []);
 
   // Custom SVG Icons
-  const SmartphoneIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-      <line x1="12" y1="18" x2="12.01" y2="18"/>
-    </svg>
-  );
-
   const LaptopIcon = ({ className }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <rect x="4" y="3" width="16" height="10" rx="1"/>
       <line x1="4" y1="21" x2="20" y2="21"/>
       <line x1="6" y1="13" x2="18" y2="13"/>
+    </svg>
+  );
+
+  const SmartphoneIcon = ({ className }) => (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+      <line x1="12" y1="18" x2="12.01" y2="18"/>
     </svg>
   );
 
@@ -34,27 +34,21 @@ const Categories = () => {
     </svg>
   );
 
-  const HeadphonesIcon = ({ className }) => (
+  const EssenceIcon = ({ className }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+      <path d="M12 21a9 9 0 01-9-9c0-6 9-12 9-12s9 6 9 12a9 9 0 01-9 9z" />
     </svg>
   );
 
-  const CameraIcon = ({ className }) => (
+  const TreeIcon = ({ className }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-      <circle cx="12" cy="13" r="4"/>
+      <path d="M13 2L11 2V4H13V2ZM12 4C8.69 4 6 6.69 6 10C6 12.97 8.03 15 11 15V13C9.34 13 8 11.66 8 10C8 7.79 9.79 6 12 6C14.21 6 16 7.79 16 10C16 11.66 14.66 13 13 13V15C15.97 15 18 12.97 18 10C18 6.69 15.31 4 12 4ZM11 15H13V22H11V15Z"/>
     </svg>
   );
 
-  const GamepadIcon = ({ className }) => (
+  const ShirtIcon = ({ className }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <line x1="6" y1="11" x2="10" y2="11"/>
-      <line x1="8" y1="9" x2="8" y2="13"/>
-      <line x1="15" y1="12" x2="15.01" y2="12"/>
-      <line x1="18" y1="10" x2="18.01" y2="10"/>
-      <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.152A4 4 0 0 0 17.32 5z"/>
+      <path d="M20.38 3.46L16 2.81V6H8V2.81L3.62 3.46C2.68 3.6 2 4.45 2 5.4V10C2 14.97 6.48 19 12 19S22 14.97 22 10V5.4C22 4.45 21.32 3.6 20.38 3.46Z" />
     </svg>
   );
 
@@ -67,63 +61,63 @@ const Categories = () => {
   const categories = [
     {
       id: 1,
-      title: "Electronics",
-      subtitle: "Latest Tech & Gadgets",
-      icon: SmartphoneIcon,
-      count: "2,450+ items",
-      color: "from-blue-500 to-purple-600",
-      bgColor: "bg-blue-50",
-      textColor: "text-blue-600"
+      title: "IT Solutions & Software",
+      subtitle: "Licensed software, ERP, mobile apps & AI solutions",
+      icon: LaptopIcon,
+      count: "500+ items",
+      color: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800"
     },
     {
       id: 2,
-      title: "Computers",
-      subtitle: "Laptops & Accessories",
-      icon: LaptopIcon,
-      count: "1,230+ items",
-      color: "from-green-500 to-teal-600",
-      bgColor: "bg-green-50",
-      textColor: "text-green-600"
+      title: "AI-Integrated Smart Gadgets",
+      subtitle: "Smart wearables, home automation, connected devices",
+      icon: SmartphoneIcon,
+      count: "1,000+ items",
+      color: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800"
     },
     {
       id: 3,
-      title: "Wearables",
-      subtitle: "Smart Watches & Bands",
+      title: "Sports & Gym Workout Gadgets",
+      subtitle: "Fitness trackers, gym tech accessories, workout tools",
       icon: WatchIcon,
-      count: "850+ items",
-      color: "from-pink-500 to-rose-600",
-      bgColor: "bg-pink-50",
-      textColor: "text-pink-600"
+      count: "800+ items",
+      color: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800"
     },
     {
       id: 4,
-      title: "Audio",
-      subtitle: "Headphones & Speakers",
-      icon: HeadphonesIcon,
-      count: "675+ items",
-      color: "from-orange-500 to-red-600",
-      bgColor: "bg-orange-50",
-      textColor: "text-orange-600"
+      title: "Traditional & Natural Essences",
+      subtitle: "Oud Oil, Sandalwood Oil, Frankincense & More",
+      icon: EssenceIcon,
+      count: "300+ items",
+      color: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800"
     },
     {
       id: 5,
-      title: "Photography",
-      subtitle: "Cameras & Equipment",
-      icon: CameraIcon,
-      count: "420+ items",
-      color: "from-purple-500 to-indigo-600",
-      bgColor: "bg-purple-50",
-      textColor: "text-purple-600"
+      title: "Agarwood Exports",
+      subtitle: "Premium agarwood products in partnership with Goviceylon",
+      icon: TreeIcon,
+      count: "200+ items",
+      color: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800"
     },
     {
       id: 6,
-      title: "Gaming",
-      subtitle: "Games & Accessories",
-      icon: GamepadIcon,
-      count: "980+ items",
-      color: "from-red-500 to-pink-600",
-      bgColor: "bg-red-50",
-      textColor: "text-red-600"
+      title: "Clothing, Fashion & Lifestyle",
+      subtitle: "Trend-driven clothing, accessories & lifestyle items",
+      icon: ShirtIcon,
+      count: "1,500+ items",
+      color: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800"
     }
   ];
 
@@ -133,14 +127,14 @@ const Categories = () => {
       title: "Weekend Sale",
       discount: "Up to 70% OFF",
       description: "Limited time offers",
-      gradient: "from-yellow-400 to-orange-500"
+      gradient: "from-gray-500 to-gray-700"
     },
     {
       id: 2,
       title: "New Arrivals",
       discount: "Fresh Stock",
       description: "Latest products",
-      gradient: "from-blue-400 to-blue-600"
+      gradient: "from-gray-500 to-gray-700"
     }
   ];
 
@@ -242,11 +236,11 @@ const Categories = () => {
         <div className={`text-center transform transition-all duration-1000 delay-600 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white relative overflow-hidden">
+          <div className="bg-gradient-to-r from-gray-600 to-gray-700 rounded-2xl p-8 text-white relative overflow-hidden">
             <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
               <p className="text-lg mb-6 opacity-90">Browse our complete collection of products</p>
-              <button className="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transform transition-all duration-300 hover:scale-105 shadow-lg">
+              <button className="bg-white text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transform transition-all duration-300 hover:scale-105 shadow-lg">
                 View All Products
               </button>
             </div>

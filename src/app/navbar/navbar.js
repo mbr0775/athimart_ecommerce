@@ -1,314 +1,413 @@
+"use client";
 import { useState, useEffect } from 'react';
 
-function Navbar() {
+function AthimartPlatform() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  
-  // Using placeholder images that will actually work
-  const slides = [
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const menuItems = [
+    { name: 'TECHNOLOGY', icon: '💻', hasDropdown: true },
+    { name: 'FITNESS', icon: '🏃', hasDropdown: true },
+    { name: 'LIFESTYLE', icon: '👔', hasDropdown: true },
+    { name: 'TRADITION', icon: '🌿', hasDropdown: true },
+    { name: 'IT SOLUTIONS', icon: '⚙️', hasDropdown: true },
+    { name: 'ABOUT US', icon: '', hasDropdown: false },
+    { name: 'CONTACT', icon: '', hasDropdown: false }
+  ];
+
+  const heroSlides = [
     {
-      image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=1200&h=800&fit=crop',
-      title: 'Premium Olive Oil Collection',
-      subtitle: 'Pure, cold-pressed excellence',
-      description: 'Discover our selection of artisanal olive oils from the finest Mediterranean groves.'
+      id: 1,
+      category: "AI-Powered Technology",
+      title: "SMART GADGETS",
+      subtitle: "WHERE INNOVATION MEETS DAILY LIFE",
+      description: "Experience the future with AI-powered wearables, smartwatches, and intelligent devices",
+      image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=800&h=600&fit=crop",
+      bgGradient: "from-blue-900/40 via-cyan-900/30 to-slate-900/40",
+      buttonText: "EXPLORE AI TECH",
+      badge: "AI Powered"
     },
     {
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD-1siZ1E6ipHvzr2gtABQCFEayX8uMXIqeQ&s',
-      title: 'Luxury Oud Fragrances',
-      subtitle: 'Timeless Arabian scents',
-      description: 'Experience the rich, woody essence of premium oud oils and perfumes.'
+      id: 2,
+      category: "Fitness Technology",
+      title: "FITNESS GEAR",
+      subtitle: "ELEVATE YOUR PERFORMANCE",
+      description: "Professional-grade fitness technology and equipment for athletes and enthusiasts",
+      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop",
+      bgGradient: "from-orange-900/40 via-red-900/30 to-gray-900/40",
+      buttonText: "SHOP FITNESS",
+      badge: "Performance"
     },
     {
-      image: 'https://powerhouse.qa/wp-content/uploads/2024/09/IMG_8767-scaled.jpeg',
-      title: 'Sports & Fitness Gear',
-      subtitle: 'Gear up for greatness',
-      description: 'Professional-grade equipment for athletes and fitness enthusiasts.'
+      id: 3,
+      category: "Premium Fashion",
+      title: "LIFESTYLE COLLECTION",
+      subtitle: "STYLE MEETS SOPHISTICATION",
+      description: "Curated premium fashion and lifestyle products for the modern individual",
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop",
+      bgGradient: "from-purple-900/40 via-indigo-900/30 to-gray-900/40",
+      buttonText: "DISCOVER FASHION",
+      badge: "Premium"
     },
     {
-      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop',
-      title: 'Fashion Sale Event',
-      subtitle: 'Style meets savings',
-      description: 'Trendy apparel and accessories at unbeatable prices.'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&h=800&fit=crop',
-      title: 'Mobile App Solutions',
-      subtitle: 'Technology at your fingertips',
-      description: 'Custom mobile applications and digital solutions for your business.'
+      id: 4,
+      category: "Natural Essences",
+      title: "AGARWOOD OILS",
+      subtitle: "TRADITION PRESERVED IN PURITY",
+      description: "Authentic agarwood and sandalwood oils - ancient essence for modern luxury",
+      image: "https://tmhagarwood.com/wp-content/uploads/2021/10/Agarwood-perfume-price-Thien-Moc-Huong-400x400.jpg",
+      bgGradient: "from-amber-900/40 via-yellow-800/30 to-gray-900/40",
+      buttonText: "EXPLORE TRADITION",
+      badge: "Authentic"
     }
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Handle scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
 
-  // Handle slideshow with working auto-advance
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % slides.length);
-    }, 4000); // Changed to 4 seconds for better visibility
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % slides.length);
-  };
+  const currentHero = heroSlides[currentSlide];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Fixed Navbar */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200' : 'bg-white/90 backdrop-blur-sm shadow-md border-b-2 border-gray-300'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+    <div className="relative w-full min-h-screen">
+      {/* Top Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-md text-white z-50 border-b border-gray-800">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-20">
+            
             {/* Logo */}
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-black to-black bg-clip-text text-transparent">
-                Athimart
-              </h1>
-            </div>
-
-            {/* Desktop Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search products, software, services..."
-                  className="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:shadow-md hover:bg-gray-50"
-                />
+            <div className="flex items-center space-x-3">
+              <div className="flex flex-col">
+                <span className="text-3xl font-black tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                  ATHIMART
+                </span>
               </div>
             </div>
 
-            {/* Desktop Right Side Icons */}
-            <div className="hidden md:flex items-center space-x-2">
+            {/* Desktop Menu */}
+            <div className="hidden lg:flex items-center space-x-8">
+              {/* Shop Dropdown */}
+              <div 
+                className="relative group"
+                onMouseEnter={() => setActiveMenu('SHOP')}
+                onMouseLeave={() => setActiveMenu(null)}
+              >
+                <button className="text-[11px] font-bold tracking-widest text-gray-300 hover:text-white transition-colors duration-200 py-2 flex items-center space-x-1">
+                  <span>SHOP</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 to-purple-500 transform origin-left transition-transform duration-300 ${activeMenu === 'SHOP' ? 'scale-x-100' : 'scale-x-0'}`} />
+                
+                {/* Dropdown Menu */}
+                <div className={`absolute top-full left-0 mt-2 w-64 bg-black/95 backdrop-blur-md border border-gray-800 rounded-lg shadow-2xl transition-all duration-300 ${activeMenu === 'SHOP' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                  <div className="py-2">
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>💻</span>
+                      <div>
+                        <div className="font-semibold">Technology</div>
+                        <div className="text-xs text-gray-500">AI Gadgets & Smart Devices</div>
+                      </div>
+                    </a>
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>🏃</span>
+                      <div>
+                        <div className="font-semibold">Fitness</div>
+                        <div className="text-xs text-gray-500">Gear & Wearables</div>
+                      </div>
+                    </a>
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>👔</span>
+                      <div>
+                        <div className="font-semibold">Lifestyle</div>
+                        <div className="text-xs text-gray-500">Fashion & Accessories</div>
+                      </div>
+                    </a>
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>🌿</span>
+                      <div>
+                        <div className="font-semibold">Tradition</div>
+                        <div className="text-xs text-gray-500">Agarwood & Natural Oils</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Services Dropdown */}
+              <div 
+                className="relative group"
+                onMouseEnter={() => setActiveMenu('SERVICES')}
+                onMouseLeave={() => setActiveMenu(null)}
+              >
+                <button className="text-[11px] font-bold tracking-widest text-gray-300 hover:text-white transition-colors duration-200 py-2 flex items-center space-x-1">
+                  <span>SERVICES</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-500 to-purple-500 transform origin-left transition-transform duration-300 ${activeMenu === 'SERVICES' ? 'scale-x-100' : 'scale-x-0'}`} />
+                
+                {/* Dropdown Menu */}
+                <div className={`absolute top-full left-0 mt-2 w-64 bg-black/95 backdrop-blur-md border border-gray-800 rounded-lg shadow-2xl transition-all duration-300 ${activeMenu === 'SERVICES' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                  <div className="py-2">
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>⚙️</span>
+                      <div>
+                        <div className="font-semibold">IT Solutions</div>
+                        <div className="text-xs text-gray-500">ERP & Enterprise Systems</div>
+                      </div>
+                    </a>
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>🤖</span>
+                      <div>
+                        <div className="font-semibold">AI Automation</div>
+                        <div className="text-xs text-gray-500">Intelligent Business Tools</div>
+                      </div>
+                    </a>
+                    <a href="#" className="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors">
+                      <span>📱</span>
+                      <div>
+                        <div className="font-semibold">Digital Solutions</div>
+                        <div className="text-xs text-gray-500">Apps & Web Development</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Simple Links */}
+              <a href="#" className="text-[11px] font-bold tracking-widest text-gray-300 hover:text-white transition-colors duration-200">
+                ABOUT US
+              </a>
+              <a href="#" className="text-[11px] font-bold tracking-widest text-gray-300 hover:text-white transition-colors duration-200">
+                CONTACT
+              </a>
+            </div>
+
+            {/* Right Side Icons */}
+            <div className="flex items-center space-x-3 sm:space-x-5">
+              
+              {/* Search Icon */}
+              <button className="text-white hover:text-gray-300 transition-colors duration-200 p-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+
               {/* User Icon */}
-              <button className="p-3 text-gray-600 hover:text-black hover:bg-gray-50 rounded-full transition-all duration-200 group">
-                <svg className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button className="text-white hover:text-gray-300 transition-colors duration-200 p-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
 
               {/* Cart Icon with Badge */}
-              <button className="relative p-3 text-gray-600 hover:text-black hover:bg-gray-50 rounded-full transition-all duration-200 group">
-                <svg className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 002 16v6a1 1 0 001 1h1.414M7 13v8a1 1 0 001 1h8a1 1 0 001-1v-8" />
+              <button className="relative text-white hover:text-gray-300 transition-colors duration-200 p-2">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full min-w-[20px] h-5 animate-pulse">
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
                   0
                 </span>
               </button>
-            </div>
 
-            {/* Mobile Hamburger Menu */}
-            <div className="md:hidden">
-              <button
-                onClick={toggleMenu}
-                className="relative p-2 text-gray-600 hover:text-black hover:bg-gray-50 rounded-lg transition-all duration-200 focus:outline-none"
+              {/* Mobile Menu Button */}
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="lg:hidden text-white p-2"
               >
-                <div className="w-6 h-6 flex flex-col justify-center items-center">
-                  <span className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'}`}></span>
-                  <span className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-                  <span className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'}`}></span>
-                </div>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="px-4 pt-4 pb-6 bg-white/95 backdrop-blur-md border-t border-gray-200">
-            {/* Mobile Search */}
-            <div className="mb-4">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200"
-                />
-              </div>
-            </div>
-
-            {/* Mobile Menu Items */}
-            <div className="space-y-2">
-              <button className="w-full flex items-center justify-between p-4 text-gray-700 hover:text-black hover:bg-gray-50 rounded-xl transition-all duration-200">
-                <div className="flex items-center space-x-3">
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  <span className="font-medium">My Account</span>
-                </div>
-              </button>
-              <button className="w-full flex items-center justify-between p-4 text-gray-700 hover:text-black hover:bg-gray-50 rounded-xl transition-all duration-200">
-                <div className="flex items-center space-x-3">
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 002 16v6a1 1 0 001 1h1.414M7 13v8a1 1 0 001 1h8a1 1 0 001-1v-8" />
-                  </svg>
-                  <span className="font-medium">Shopping Cart</span>
-                </div>
-                <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full min-w-[20px] h-5">
-                  0
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
       </nav>
 
-      {/* Spacer to prevent content from hiding under fixed navbar */}
-      <div className="h-16"></div>
-
-      {/* Hero Slideshow Section */}
-      <div className="relative h-screen overflow-hidden">
-        {/* Slide Images */}
-        <div className="relative h-full">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${
-                index === currentIndex 
-                  ? 'opacity-100 scale-100' 
-                  : 'opacity-0 scale-105'
-              }`}
-            >
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
-            </div>
-          ))}
-        </div>
-
-        {/* Content Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center text-center px-4">
-          <div className="max-w-4xl mx-auto text-white">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 drop-shadow-2xl">
-              {slides[currentIndex].title}
-            </h1>
-            <p className="text-xl md:text-2xl mb-6 drop-shadow-lg">
-              {slides[currentIndex].subtitle}
-            </p>
-            <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90 drop-shadow-md">
-              {slides[currentIndex].description}
-            </p>
-            <button className="bg-gradient-to-r from-black to-black hover:from-gray-800 hover:to-gray-800 text-white px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 font-semibold text-lg">
-              Explore Now
+      {/* Mobile Menu */}
+      <div className={`lg:hidden fixed inset-0 bg-black z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} mt-20`}>
+        <div className="flex flex-col h-full overflow-y-auto">
+          <div className="flex justify-between items-center p-6 border-b border-gray-800">
+            <span className="text-xl font-bold text-white">MENU</span>
+            <button onClick={() => setIsMenuOpen(false)} className="text-white">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
-        </div>
-
-        {/* Navigation Arrows */}
-        <button 
-          onClick={goToPrevious}
-          className="absolute left-2 sm:left-4 md:left-6 top-1/2 transform -translate-y-[26px] bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110"
-        >
-          <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button 
-          onClick={goToNext}
-          className="absolute right-2 sm:right-4 md:right-6 top-1/2 transform -translate-y-[26px] bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110"
-        >
-          <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
-        {/* Slide Indicators */}
-        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-[60px] -translate-y-[120px] flex space-x-3">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                index === currentIndex 
-                  ? 'bg-black scale-125 shadow-lg' 
-                  : 'bg-black/50 hover:bg-black/75'
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Progress Bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-          <div 
-            className="h-full bg-gradient-to-r from-gray-500 to-gray-900 transition-all duration-1000 ease-linear"
-            style={{ width: `${((currentIndex + 1) / slides.length) * 100}%` }}
-          />
+          <div className="flex-1 p-6">
+            {menuItems.map((item, index) => (
+              <button key={index} className="w-full text-left text-white hover:text-gray-300 py-4 border-b border-gray-800 text-sm font-semibold tracking-wider flex items-center space-x-2">
+                {item.icon && <span>{item.icon}</span>}
+                <span>{item.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Demo Content */}
-      <div className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center bg-gradient-to-r from-black to-black bg-clip-text text-transparent">
-            Featured Products
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { name: "Premium Olive Oil", price: "$24.99", category: "Gourmet Foods", image: "https://cdn.pixabay.com/photo/2016/08/15/20/29/olive-oil-1596417_1280.jpg" },
-              { name: "Fitness Tracker Pro", price: "$199.99", category: "Sports & Tech", image: "https://cdn.pixabay.com/photo/2021/11/03/05/33/fitness-band-6764739_1280.jpg" },
-              { name: "Luxury Oud Perfume", price: "$149.99", category: "Fragrances", image: "https://tuzzut.com/cdn/shop/files/POSTER04.jpg?v=1712214935" }
-            ].map((product, index) => (
-              <div key={index} className="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded-2xl mb-6"
-                />
-                <div className="mb-2">
-                  <span className="text-sm text-black font-semibold bg-gray-50 px-3 py-1 rounded-full">
-                    {product.category}
-                  </span>
+      {/* Hero Section */}
+      <div className="relative h-screen overflow-hidden mt-20">
+        {/* Background with transitions */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${currentHero.bgGradient} transition-all duration-1000`}>
+          <div className="absolute inset-0 bg-black/40" />
+          {/* Decorative elements */}
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}} />
+        </div>
+
+        <div className="relative max-w-[1400px] mx-auto px-4 sm:px-6 h-full flex items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+            
+            {/* Left Content */}
+            <div className="text-white space-y-6 z-10">
+              {/* Category Badge */}
+              <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+                <span className="text-xs tracking-widest font-semibold">{currentHero.category}</span>
+              </div>
+
+              {/* Main Title */}
+              <div className="space-y-2">
+                <p className="text-sm tracking-[0.3em] text-gray-300 font-light uppercase">
+                  {currentHero.subtitle}
+                </p>
+                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none">
+                  {currentHero.title}
+                </h1>
+              </div>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg text-gray-300 max-w-xl leading-relaxed">
+                {currentHero.description}
+              </p>
+              
+              {/* CTA Button */}
+              <div className="flex items-center space-x-4 pt-4">
+                <button className="group relative bg-white text-black px-8 py-4 text-xs font-bold tracking-widest uppercase overflow-hidden transition-all duration-300 hover:bg-gray-100 shadow-xl">
+                  <span className="relative z-10">{currentHero.buttonText}</span>
+                </button>
+                <button className="group relative bg-transparent border-2 border-white text-white px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:bg-white hover:text-black">
+                  LEARN MORE
+                </button>
+              </div>
+
+              {/* Trust Badges */}
+              <div className="flex items-center space-x-6 pt-6">
+                <div className="flex items-center space-x-2">
+                  <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div className="text-xs">
+                    <div className="font-bold">Authentic</div>
+                    <div className="text-gray-400">Verified Products</div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{product.name}</h3>
-                <p className="text-gray-600 mb-6">Premium quality product with exceptional design and functionality.</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold bg-gradient-to-r from-black to-black bg-clip-text text-transparent">
-                    {product.price}
-                  </span>
-                  <button className="bg-gradient-to-r from-black to-black hover:from-gray-800 hover:to-gray-800 text-white px-6 py-3 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg">
-                    Add to Cart
-                  </button>
+                <div className="flex items-center space-x-2">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div className="text-xs">
+                    <div className="font-bold">Fast Delivery</div>
+                    <div className="text-gray-400">Global Shipping</div>
+                  </div>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Right Product Image */}
+            <div className="relative h-[400px] lg:h-[600px] flex items-center justify-center">
+              <div className="relative group">
+                {/* Badge */}
+                <div className="absolute top-4 right-4 z-20 bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-xl animate-pulse">
+                  {currentHero.badge}
+                </div>
+
+                {/* Product Image */}
+                <img
+                  src={currentHero.image}
+                  alt={currentHero.title}
+                  className="w-full max-w-2xl h-auto object-contain transform -rotate-12 transition-all duration-700 group-hover:rotate-0 group-hover:scale-110 drop-shadow-2xl"
+                />
+                
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="absolute bottom-8 left-0 right-0 z-20">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+            <div className="flex items-center justify-between">
+              
+              {/* Slide Indicators */}
+              <div className="flex space-x-3">
+                {heroSlides.map((slide, index) => (
+                  <button
+                    key={slide.id}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`transition-all duration-300 ${
+                      index === currentSlide 
+                        ? 'w-12 h-2 bg-white rounded-full' 
+                        : 'w-2 h-2 bg-white/40 rounded-full hover:bg-white/60'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Thumbnails */}
+              <div className="hidden sm:flex items-center space-x-3">
+                {heroSlides.map((slide, index) => (
+                  <button
+                    key={slide.id}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-16 h-16 rounded overflow-hidden border-2 transition-all duration-300 ${
+                      index === currentSlide 
+                        ? 'border-white scale-110' 
+                        : 'border-gray-600 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tagline Section */}
+      <div className="relative bg-gradient-to-r from-black via-gray-900 to-black py-8 border-y border-gray-800">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-white tracking-wide">
+            <span className="font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Where Technology Meets
+            </span>
+            <br className="sm:hidden" />
+            <span className="text-gray-300"> Lifestyle, Fitness & Tradition</span>
+          </h2>
         </div>
       </div>
     </div>
   );
 }
 
-export default Navbar;
+export default AthimartPlatform;

@@ -1,317 +1,339 @@
 "use client";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
-// Combined component that includes both HomeSection and Banner functionality
-function HeroBanner() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+function VideoStoryHero() {
+  const [currentScene, setCurrentScene] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  // Combined banner data - moved outside to prevent recreation
-  const banners = [
+  const scenes = [
     {
       id: 1,
-      category: "Software Solutions",
-      title: "Welcome to Athimart",
-      subtitle: "Your trusted partner for software & services",
-      description: "Discover genuine software licenses, professional IT services, quality products, and educational resources all in one place.",
-      buttonText: "Explore Products",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&h=400&fit=crop&crop=center",
-      bgColor: "from-blue-900/20 to-purple-900/20",
-      type: "service"
+      title: "AI in Motion",
+      subtitle: "Smart Technology Meets Daily Life",
+      image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=1920&h=1080&fit=crop",
+      description: "Experience the future with intelligent wearables",
+      gradient: "from-blue-900/40 via-cyan-900/30 to-blue-800/40",
+      accentColor: "text-cyan-400"
     },
     {
       id: 2,
-      category: "Premium Software Licenses",
-      title: "Authentic Software",
-      subtitle: "Solutions for Business",
-      description: "Get genuine Microsoft Office, Adobe Creative Suite, antivirus software, and more at competitive prices with full support.",
-      buttonText: "Browse Software",
-      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&h=400&fit=crop&crop=center",
-      bgColor: "from-gray-900/20 to-slate-900/20",
-      type: "service"
+      title: "Fitness Reimagined",
+      subtitle: "Your Journey, Perfectly Tracked",
+      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1920&h=1080&fit=crop",
+      description: "Transform your wellness with precision tracking",
+      gradient: "from-orange-900/40 via-red-900/30 to-pink-800/40",
+      accentColor: "text-orange-400"
     },
     {
       id: 3,
-      category: "Premium Spice, Kashmir Saffron",
-      title: "Pure Saffron Threads &",
-      subtitle: "Authentic Quality",
-      description: "Experience the finest saffron from Kashmir, carefully selected and processed to deliver exceptional flavor and aroma.",
-      buttonText: "Shop Now",
-      image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&h=400&fit=crop&crop=center",
-      bgColor: "from-amber-900/20 to-orange-900/20",
-      type: "product"
+      title: "Tradition Preserved",
+      subtitle: "Ancient Essence, Modern Luxury",
+      image: "https://www.instamojo.com/blog/wp-content/uploads/2022/01/Saachi-Terracotta.jpeg",
+      description: "Discover authentic agarwood and rare fragrances",
+      gradient: "from-amber-900/40 via-yellow-900/30 to-orange-800/40",
+      accentColor: "text-amber-400"
     },
     {
       id: 4,
-      category: "Handcrafted Jewelry, Precious Stones",
-      title: "Exquisite Gemstone &",
-      subtitle: "Artisan Jewelry Collection",
-      description: "Discover handcrafted jewelry featuring precious gemstones, each piece telling a story of craftsmanship and elegance.",
-      buttonText: "Explore Collection",
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&h=400&fit=crop&crop=center",
-      bgColor: "from-purple-900/20 to-pink-900/20",
-      type: "product"
-    },
-    {
-      id: 5,
-      category: "Pure Essential Oil, Aromatic",
-      title: "Premium Agarwood Oil &",
-      subtitle: "Natural Fragrance",
-      description: "Indulge in the rich, complex aroma of authentic agarwood oil, distilled using traditional methods for purity.",
-      buttonText: "Discover Scents",
-      image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500&h=400&fit=crop&crop=center",
-      bgColor: "from-green-900/20 to-teal-900/20",
-      type: "product"
-    },
-    {
-      id: 6,
-      category: "Professional IT Services",
-      title: "Expert Technology",
-      subtitle: "Support Solutions",
-      description: "From system setup and maintenance to cybersecurity consulting, our certified professionals provide comprehensive IT solutions.",
-      buttonText: "Get Support",
-      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=500&h=400&fit=crop&crop=center",
-      bgColor: "from-indigo-900/20 to-blue-900/20",
-      type: "service"
+      title: "Lifestyle Delivered",
+      subtitle: "Curated Excellence at Your Door",
+      image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1920&h=1080&fit=crop",
+      description: "Premium products, unboxing joy",
+      gradient: "from-purple-900/40 via-indigo-900/30 to-violet-800/40",
+      accentColor: "text-purple-400"
     }
   ];
 
-  // Memoized function to go to next slide
-  const goToNextSlide = useCallback(() => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentSlide(prev => (prev + 1) % banners.length);
-        setTimeout(() => setIsAnimating(false), 100);
-      }, 150);
-    }
-  }, [isAnimating, banners.length]);
+  const SCENE_DURATION = 5000; // 5 seconds per scene
 
-  // Auto-change banners every 3 seconds
+  useEffect(() => {
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          return 0;
+        }
+        return prev + (100 / (SCENE_DURATION / 50));
+      });
+    }, 50);
+
+    return () => clearInterval(progressInterval);
+  }, [currentScene]);
+
   useEffect(() => {
     const timer = setInterval(() => {
-      goToNextSlide();
-    }, 3000); // Changed to 3 seconds
+      setIsTransitioning(true);
+      setProgress(0);
+      
+      setTimeout(() => {
+        setCurrentScene(prev => (prev + 1) % scenes.length);
+        setTimeout(() => setIsTransitioning(false), 100);
+      }, 600);
+    }, SCENE_DURATION);
 
     return () => clearInterval(timer);
-  }, [goToNextSlide]);
+  }, [scenes.length]);
 
-  const handleSlideChange = (slideIndex) => {
-    if (isAnimating) return;
-    
-    setIsAnimating(true);
-    const newIndex = typeof slideIndex === 'function' ? slideIndex(currentSlide) : slideIndex;
-    
-    setTimeout(() => {
-      setCurrentSlide(newIndex);
-      setTimeout(() => setIsAnimating(false), 100);
-    }, 150);
-  };
-
-  const goToSlide = (index) => {
-    if (index !== currentSlide && !isAnimating) {
-      handleSlideChange(index);
+  const goToScene = (index) => {
+    if (index !== currentScene && !isTransitioning) {
+      setIsTransitioning(true);
+      setProgress(0);
+      setTimeout(() => {
+        setCurrentScene(index);
+        setTimeout(() => setIsTransitioning(false), 100);
+      }, 600);
     }
   };
 
-  const nextSlide = () => {
-    if (!isAnimating) {
-      handleSlideChange((prev) => (prev + 1) % banners.length);
-    }
-  };
-
-  const prevSlide = () => {
-    if (!isAnimating) {
-      handleSlideChange((prev) => (prev - 1 + banners.length) % banners.length);
-    }
-  };
-
-  const currentBanner = banners[currentSlide];
+  const currentSceneData = scenes[currentScene];
 
   return (
-    <div className={`w-full min-h-[100vh] relative overflow-hidden bg-gradient-to-br ${currentBanner.bgColor} transition-all duration-1000 ease-out`}>
-      {/* Animated background elements */}
+    <div className="relative w-full h-screen overflow-hidden bg-black">
+      {/* Video-like background with parallax effect */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-black/5 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-24 h-24 bg-black/10 rounded-full animate-bounce" style={{animationDuration: '3s'}}></div>
-        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-black/5 rounded-full animate-ping" style={{animationDuration: '4s'}}></div>
-        <div className="absolute top-32 right-1/4 w-20 h-20 bg-black/5 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
-      </div>
-
-      {/* Navigation arrows */}
-      <button 
-        onClick={prevSlide}
-        disabled={isAnimating}
-        className="absolute left-8 top-1/2 transform -translate-y-1/2 z-20 p-4 rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all hover:scale-110 disabled:opacity-50"
-      >
-        <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      
-      <button 
-        onClick={nextSlide}
-        disabled={isAnimating}
-        className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 p-4 rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all hover:scale-110 disabled:opacity-50"
-      >
-        <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-
-      {/* Auto-advance indicator */}
-      <div className="absolute top-8 right-8 z-20">
-        <div className="flex items-center space-x-2 bg-black/10 backdrop-blur-sm px-3 py-2 rounded-full">
-          <div className="w-2 h-2 bg-black rounded-full animate-pulse"></div>
-          <span className="text-xs text-black font-medium">AUTO</span>
-        </div>
-      </div>
-
-      {/* Main container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[100vh]">
-          
-          {/* Left Content */}
-          <div className={`order-2 lg:order-1 text-center lg:text-left transform transition-all duration-700 ease-out ${
-            isAnimating ? 'translate-x-8 opacity-0' : 'translate-x-0 opacity-100'
-          }`}>
-            <div className="space-y-6">
-              <div className="overflow-hidden">
-                <p className={`text-sm text-gray-600 tracking-wider uppercase font-medium transition-all duration-500 delay-100 transform ${
-                  isAnimating ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
-                }`}>
-                  {currentBanner.category}
-                </p>
-              </div>
-              
-              <div className="overflow-hidden">
-                <h1 className={`text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight transition-all duration-700 delay-200 transform ${
-                  isAnimating ? 'translate-y-8 opacity-0' : 'translate-y-0 opacity-100'
-                }`}>
-                  <span className="block">{currentBanner.title}</span>
-                  <span className="block bg-gradient-to-r from-white to-grey bg-clip-text text-transparent">
-                    {currentBanner.subtitle}
-                  </span>
-                </h1>
-              </div>
-
-              <div className="overflow-hidden">
-                <p className={`text-base md:text-lg text-white leading-relaxed max-w-xl transition-all duration-700 delay-250 transform ${
-                  isAnimating ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
-                }`}>
-                  {currentBanner.description}
-                </p>
-              </div>
-              
-              <div className="overflow-hidden">
-                <button className={`group relative bg-black text-white px-10 py-4 font-bold text-sm tracking-wider uppercase overflow-hidden transition-all duration-700 delay-300 transform hover:scale-105 ${
-                  isAnimating ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
-                }`}>
-                  <span className="relative z-10 transition-colors group-hover:text-white">
-                    {currentBanner.buttonText}
-                  </span>
-                  <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  <div className="absolute -top-2 -right-2 w-4 h-4 bg-white transform rotate-45 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          {/* Right Image Content */}
-          <div className={`order-1 lg:order-2 relative transition-all duration-700 ease-out ${
-            isAnimating ? '-translate-x-8 opacity-0' : 'translate-x-0 opacity-100'
-          }`}>
-            <div className="relative group cursor-pointer">
-              {/* Main image container */}
-              <div className="relative w-full max-w-lg mx-auto h-[300px] rounded-3xl overflow-hidden shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-1">
-                {/* Image */}
-                <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black relative overflow-hidden">
-                  <img
-                    key={currentBanner.id} // Added key to force re-render
-                    src={currentBanner.image}
-                    alt={currentBanner.subtitle}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                    style={{
-                      filter: 'contrast(1.1) brightness(0.9)',
-                    }}
-                  />
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                  
-                  {/* Category badge */}
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-medium rounded-full">
-                    {currentBanner.type === 'service' ? 'Service' : 'Product'}
-                  </div>
-                </div>
-                
-                {/* Floating elements */}
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-black rounded-full animate-pulse"></div>
-                <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-black rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -z-10 top-8 -right-8 w-64 h-64 bg-black/10 rounded-full blur-3xl"></div>
-              <div className="absolute -z-10 -top-8 left-8 w-32 h-32 bg-black/5 rounded-full blur-2xl"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Navigation Controls */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-8">
-          {/* Enhanced Dot Navigation */}
-          <div className="flex space-x-3">
-            {banners.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                disabled={isAnimating}
-                className={`group relative transition-all duration-300 disabled:opacity-50 ${
-                  currentSlide === index 
-                    ? 'w-12 h-4 bg-black rounded-full' 
-                    : 'w-4 h-4 bg-black/30 rounded-full hover:bg-black/60 hover:scale-125'
-                }`}
-                aria-label={`Go to banner ${index + 1}`}
-              >
-                {currentSlide === index && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-full animate-pulse"></div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Enhanced Progress Bar with Auto-advance Indicator */}
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-          <div className="relative w-48 h-1 bg-black/20 rounded-full overflow-hidden">
+        {scenes.map((scene, index) => (
+          <div
+            key={scene.id}
+            className={`absolute inset-0 transition-all duration-1000 ease-out ${
+              currentScene === index
+                ? 'opacity-100 scale-100'
+                : currentScene === (index - 1 + scenes.length) % scenes.length
+                ? 'opacity-0 scale-110'
+                : 'opacity-0 scale-95'
+            }`}
+          >
+            {/* Background image with Ken Burns effect */}
             <div 
-              className="h-full bg-gradient-to-r from-black via-gray-700 to-black relative rounded-full transition-all duration-1000 ease-out"
-              style={{ width: `${((currentSlide + 1) / banners.length) * 100}%` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+              className={`absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] ease-linear ${
+                currentScene === index && !isTransitioning ? 'scale-110' : 'scale-100'
+              }`}
+              style={{
+                backgroundImage: `url(${scene.image})`,
+                filter: 'brightness(0.7) contrast(1.1) saturate(1.2)'
+              }}
+            />
+            {/* Gradient overlay */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${scene.gradient} backdrop-blur-[1px]`} />
+            {/* Vignette effect */}
+            <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60" />
+          </div>
+        ))}
+      </div>
+
+      {/* Animated particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${3 + Math.random() * 4}s`
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+          
+          {/* Scene counter */}
+          <div className={`transition-all duration-700 mb-6 translate-y-[-130px] ${
+            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+          }`}>
+            <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+              <div className="flex space-x-1">
+                {scenes.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                      currentScene === index ? 'bg-white w-6' : 'bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
-            {/* Auto-advance progress indicator */}
-            <div className="absolute top-0 left-0 h-full bg-white/20 rounded-full animate-pulse" 
-                 style={{ 
-                   width: `${((currentSlide + 1) / banners.length) * 100}%`,
-                   animation: 'progress 3s linear infinite'
-                 }}>
+          </div>
+
+          {/* Main title */}
+          <div className={`transition-all duration-700 delay-100 mb-3 translate-y-[-100px] ${
+            isTransitioning ? 'opacity-0 scale-95 translate-y-8' : 'opacity-100 scale-100 translate-y-0'
+          }`}>
+            <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight ${currentSceneData.accentColor} drop-shadow-2xl`}>
+              {currentSceneData.title}
+            </h1>
+          </div>
+
+          {/* Subtitle */}
+          <div className={`transition-all duration-700 delay-200 mb-4 translate-y-[-80px] ${
+            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+          }`}>
+            <p className="text-lg sm:text-xl md:text-2xl font-light text-white/90 tracking-wide">
+              {currentSceneData.subtitle}
+            </p>
+          </div>
+
+          {/* Description */}
+          <div className={`transition-all duration-700 delay-300 mb-6 translate-y-[-90px] ${
+            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+          }`}>
+            <p className="text-sm sm:text-base text-white/70 max-w-xl mx-auto">
+              {currentSceneData.description}
+            </p>
+          </div>
+
+          {/* CTA Button */}
+          <div className={`transition-all duration-700 delay-400 mb-6 translate-y-[-60px] ${
+            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+          }`}>
+            <button className="group relative px-8 py-3 bg-white text-black font-bold text-xs tracking-widest uppercase overflow-hidden rounded-full transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+              <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+                Explore Now
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-gray-900 to-zinc-900 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-full" />
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl rounded-full" />
+            </button>
+          </div>
+
+          {/* Brand tagline - Always visible */}
+          <div className="mt-4 translate-y-[-40px]">
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 blur-xl opacity-30 animate-pulse" />
+              <h2 className="relative text-base sm:text-lg md:text-xl font-light text-white tracking-wider">
+                Welcome to <span className="font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Athimart</span>
+              </h2>
+              <p className="relative text-xs sm:text-sm text-white/60 mt-1 tracking-widest">
+                The Future of Authentic Living
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Side decorative elements */}
-      <div className="absolute left-0 top-1/2 w-0.5 sm:w-1 h-20 sm:h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
-      <div className="absolute right-0 top-1/2 w-0.5 sm:w-1 h-20 sm:h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+      {/* Interactive scene navigation */}
+      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex items-center space-x-4">
+          {scenes.map((scene, index) => (
+            <button
+              key={scene.id}
+              onClick={() => goToScene(index)}
+              disabled={isTransitioning}
+              className="group relative flex flex-col items-center transition-all duration-300 disabled:opacity-50"
+            >
+              {/* Scene thumbnail */}
+              <div className={`relative w-14 h-14 rounded-lg overflow-hidden border-2 transition-all duration-300 mb-1 ${
+                currentScene === index
+                  ? 'border-white scale-110 shadow-2xl'
+                  : 'border-white/30 scale-90 opacity-60 hover:opacity-100 hover:scale-100'
+              }`}>
+                <img
+                  src={scene.image}
+                  alt={scene.title}
+                  className="w-full h-full object-cover"
+                />
+                {currentScene === index && (
+                  <div className="absolute inset-0 border-2 border-white/50 animate-pulse" />
+                )}
+              </div>
+              
+              {/* Scene label */}
+              <span className={`text-[10px] font-medium tracking-wide transition-all duration-300 ${
+                currentScene === index ? 'text-white' : 'text-white/50'
+              }`}>
+                {scene.title.split(' ')[0]}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Progress bar with scene indicator */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-30">
+        <div
+          className="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-100 ease-linear relative"
+          style={{ width: `${progress}%` }}
+        >
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg animate-pulse" />
+        </div>
+      </div>
+
+      {/* Scene timer */}
+      <div className="absolute top-8 right-8 z-20">
+        <div className="flex items-center space-x-3 bg-black/30 backdrop-blur-md px-4 py-3 rounded-full border border-white/20">
+          <div className="relative w-8 h-8">
+            <svg className="transform -rotate-90" width="32" height="32">
+              <circle
+                cx="16"
+                cy="16"
+                r="14"
+                stroke="rgba(255,255,255,0.2)"
+                strokeWidth="2"
+                fill="none"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="14"
+                stroke="white"
+                strokeWidth="2"
+                fill="none"
+                strokeDasharray={`${2 * Math.PI * 14}`}
+                strokeDashoffset={`${2 * Math.PI * 14 * (1 - progress / 100)}`}
+                className="transition-all duration-100 ease-linear"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+            </div>
+          </div>
+          <span className="text-white text-sm font-medium">
+            {currentScene + 1}/{scenes.length}
+          </span>
+        </div>
+      </div>
+
+      {/* Skip button */}
+      <button
+        onClick={() => goToScene((currentScene + 1) % scenes.length)}
+        className="absolute top-8 left-8 z-20 group px-6 py-3 bg-white/10 backdrop-blur-md text-white text-sm font-medium rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105"
+      >
+        <span className="flex items-center space-x-2">
+          <span>Skip</span>
+          <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
 
       <style jsx>{`
-        @keyframes progress {
-          0% { transform: scaleX(0); }
-          100% { transform: scaleX(1); }
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100vh) translateX(50px);
+            opacity: 0;
+          }
+        }
+        .animate-float {
+          animation: float linear infinite;
+        }
+        .bg-gradient-radial {
+          background: radial-gradient(circle at center, var(--tw-gradient-stops));
         }
       `}</style>
     </div>
   );
 }
 
-export default HeroBanner;
+export default VideoStoryHero;
