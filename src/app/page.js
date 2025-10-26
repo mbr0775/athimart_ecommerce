@@ -2,17 +2,24 @@
 
 import Image from "next/image";
 import Navbar from "./navbar/navbar";
-import VideoStoryHero from "./home/banner";
 import Categories from "./Categories/Categories";
 import FeaturedItems from "./featuredItems/featuredItems";
 import AnniversaryOffer from "./Offers/anniversaryOffer";
-
+import FashionTextiles from "./ClothingFashion/FashionTextiles";
+import HeroBanner from "./home/banner";
 
 export default function Home() {
   return (
     <div className="font-sans min-h-screen">
       {/* Import and use the Navbar component */}
       <Navbar />
+      {/* Hero Banner Section */}
+      <HeroBanner />
+
+
+
+      {/* Featured Items Component */}
+      <FeaturedItems />
     
       {/* Categories Component */}
       <Categories />
@@ -21,11 +28,8 @@ export default function Home() {
       {/* Anniversary Offer Component */}
       <AnniversaryOffer />
 
-      {/* Featured Items Component */}
-      <FeaturedItems />
-
-      {/* Video Story Hero Component */}
-      <VideoStoryHero />
+      {/* Fashion Textiles Component */}
+      <FashionTextiles />
     </div>
   );
 }

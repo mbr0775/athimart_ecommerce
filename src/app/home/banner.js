@@ -1,339 +1,349 @@
-"use client";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function VideoStoryHero() {
-  const [currentScene, setCurrentScene] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [progress, setProgress] = useState(0);
+const slides = [
+  {
+    subtitle: 'WELCOME TO ATHIMART',
+    title: 'Where Technology Meets Lifestyle, Fitness & Tradition',
+    description: 'Global e-commerce platform powered by Tokilo Technologies, delivering IT solutions, AI gadgets, fitness tech, and premium natural essences across Gulf Countries, Sri Lanka & Europe.',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
+  },
+  {
+    subtitle: 'IT SOLUTIONS & GENUINE SOFTWARE',
+    title: 'Digital Transformation & Business Innovation',
+    description: 'Licensed software distribution, ERP systems, mobile applications, and AI-driven business solutions powered by Tokilo Technologies for modern enterprises.',
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+  },
+  {
+    subtitle: 'AI-INTEGRATED SMART GADGETS',
+    title: 'Smart AI Devices for Modern Living',
+    description: 'Experience cutting-edge smart wearables, home automation systems, and connected devices that enhance your daily lifestyle and productivity.',
+    image: 'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%)',
+  },
+  {
+    subtitle: 'FITNESS & WELLNESS TECHNOLOGY',
+    title: 'Sports & Gym Workout Gadgets',
+    description: 'Premium fitness trackers, gym tech accessories, and workout tools designed to track, improve, and maximize your performance and health goals.',
+    image: 'https://images.unsplash.com/photo-1576243345690-4e4b79b63288?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #0a0a0a 0%, #1e1e1e 50%, #2d2d2d 100%)',
+  },
+  {
+    subtitle: 'TRADITIONAL & NATURAL ESSENCES',
+    title: 'Premium Oils & Natural Treasures',
+    description: 'Authentic Oud, Sandalwood, Frankincense, Myrrh, Rose Otto, and premium essential oils. Experience the finest traditional essences from Sri Lanka and beyond.',
+    image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #1a0e0a 0%, #2d1810 50%, #3d2416 100%)',
+  },
+  {
+    subtitle: 'PREMIUM AGARWOOD EXPORTS',
+    title: 'Luxury Agarwood Products',
+    description: 'Exclusive premium agarwood products in partnership with Goviceylon. Discover the finest quality agarwood from our Sri Lankan headquarters.',
+    image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #0d0905 0%, #1f1710 50%, #2a1f15 100%)',
+  },
+  {
+    subtitle: 'FASHION & LIFESTYLE',
+    title: 'Clothing & Premium Accessories',
+    description: 'Trend-driven clothing, fashion accessories, and lifestyle items curated for modern living. Style meets quality in every collection.',
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
+    gradient: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
+  },
+];
 
-  const scenes = [
-    {
-      id: 1,
-      title: "AI in Motion",
-      subtitle: "Smart Technology Meets Daily Life",
-      image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=1920&h=1080&fit=crop",
-      description: "Experience the future with intelligent wearables",
-      gradient: "from-blue-900/40 via-cyan-900/30 to-blue-800/40",
-      accentColor: "text-cyan-400"
-    },
-    {
-      id: 2,
-      title: "Fitness Reimagined",
-      subtitle: "Your Journey, Perfectly Tracked",
-      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1920&h=1080&fit=crop",
-      description: "Transform your wellness with precision tracking",
-      gradient: "from-orange-900/40 via-red-900/30 to-pink-800/40",
-      accentColor: "text-orange-400"
-    },
-    {
-      id: 3,
-      title: "Tradition Preserved",
-      subtitle: "Ancient Essence, Modern Luxury",
-      image: "https://www.instamojo.com/blog/wp-content/uploads/2022/01/Saachi-Terracotta.jpeg",
-      description: "Discover authentic agarwood and rare fragrances",
-      gradient: "from-amber-900/40 via-yellow-900/30 to-orange-800/40",
-      accentColor: "text-amber-400"
-    },
-    {
-      id: 4,
-      title: "Lifestyle Delivered",
-      subtitle: "Curated Excellence at Your Door",
-      image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1920&h=1080&fit=crop",
-      description: "Premium products, unboxing joy",
-      gradient: "from-purple-900/40 via-indigo-900/30 to-violet-800/40",
-      accentColor: "text-purple-400"
-    }
-  ];
-
-  const SCENE_DURATION = 5000; // 5 seconds per scene
+const AthimartHeroBanner = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [fade, setFade] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          return 0;
-        }
-        return prev + (100 / (SCENE_DURATION / 50));
-      });
-    }, 50);
-
-    return () => clearInterval(progressInterval);
-  }, [currentScene]);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIsTransitioning(true);
-      setProgress(0);
-      
+      setFade(false);
       setTimeout(() => {
-        setCurrentScene(prev => (prev + 1) % scenes.length);
-        setTimeout(() => setIsTransitioning(false), 100);
-      }, 600);
-    }, SCENE_DURATION);
-
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+        setFade(true);
+      }, 500);
+    }, 5000);
     return () => clearInterval(timer);
-  }, [scenes.length]);
+  }, []);
 
-  const goToScene = (index) => {
-    if (index !== currentScene && !isTransitioning) {
-      setIsTransitioning(true);
-      setProgress(0);
-      setTimeout(() => {
-        setCurrentScene(index);
-        setTimeout(() => setIsTransitioning(false), 100);
-      }, 600);
-    }
-  };
-
-  const currentSceneData = scenes[currentScene];
+  const { subtitle, title, description, image, gradient } = slides[currentSlide];
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
-      {/* Video-like background with parallax effect */}
-      <div className="absolute inset-0">
-        {scenes.map((scene, index) => (
+    <section
+      style={{
+        background: gradient,
+        color: 'white',
+        padding: '0',
+        position: 'relative',
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Background overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.03) 0%, transparent 50%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexDirection: isMobile ? 'column' : 'row',
+          padding: isMobile ? '60px 20px' : '80px 60px',
+          width: '100%',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
+        {/* Left Content */}
+        <div
+          style={{
+            maxWidth: isMobile ? '100%' : '50%',
+            transition: 'all 0.5s ease-in-out',
+            opacity: fade ? 1 : 0,
+            transform: fade ? 'translateX(0)' : 'translateX(-30px)',
+            marginBottom: isMobile ? '40px' : '0',
+          }}
+        >
+          {/* Subtitle */}
           <div
-            key={scene.id}
-            className={`absolute inset-0 transition-all duration-1000 ease-out ${
-              currentScene === index
-                ? 'opacity-100 scale-100'
-                : currentScene === (index - 1 + scenes.length) % scenes.length
-                ? 'opacity-0 scale-110'
-                : 'opacity-0 scale-95'
-            }`}
+            style={{
+              fontSize: isMobile ? '0.7rem' : '0.8rem',
+              fontWeight: '600',
+              letterSpacing: '3px',
+              color: '#999',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+            }}
           >
-            {/* Background image with Ken Burns effect */}
-            <div 
-              className={`absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] ease-linear ${
-                currentScene === index && !isTransitioning ? 'scale-110' : 'scale-100'
-              }`}
-              style={{
-                backgroundImage: `url(${scene.image})`,
-                filter: 'brightness(0.7) contrast(1.1) saturate(1.2)'
-              }}
-            />
-            {/* Gradient overlay */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${scene.gradient} backdrop-blur-[1px]`} />
-            {/* Vignette effect */}
-            <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60" />
+            {subtitle}
           </div>
-        ))}
+
+          {/* Main Title */}
+          <h1
+            style={{
+              fontSize: isMobile ? '2.2rem' : '4.2rem',
+              margin: '0 0 30px 0',
+              fontWeight: '700',
+              lineHeight: '1.1',
+              letterSpacing: '-1px',
+            }}
+          >
+            {title}
+          </h1>
+
+          {/* Description */}
+          <p
+            style={{
+              fontSize: isMobile ? '1rem' : '1.1rem',
+              margin: '0 0 40px 0',
+              lineHeight: '1.7',
+              color: '#b0b0b0',
+              maxWidth: '550px',
+            }}
+          >
+            {description}
+          </p>
+
+          {/* Buttons */}
+          <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+            <button
+              style={{
+                background: 'white',
+                color: '#000',
+                padding: isMobile ? '12px 28px' : '14px 32px',
+                border: 'none',
+                borderRadius: '50px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: isMobile ? '0.9rem' : '1rem',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(255,255,255,0.2)',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 15px rgba(255,255,255,0.2)';
+              }}
+            >
+              Shop Now
+            </button>
+            <button
+              style={{
+                background: 'transparent',
+                color: 'white',
+                padding: isMobile ? '12px 28px' : '14px 32px',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '50px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: isMobile ? '0.9rem' : '1rem',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.borderColor = 'rgba(255,255,255,0.5)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.borderColor = 'rgba(255,255,255,0.3)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              Learn More
+            </button>
+          </div>
+
+          {/* Contact Info */}
+          <div
+            style={{
+              marginTop: '40px',
+              fontSize: '0.9rem',
+              color: '#888',
+              display: 'flex',
+              gap: '20px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <div>📧 info@athimart.com</div>
+            <div>📱 +974 7406 2481</div>
+          </div>
+        </div>
+
+        {/* Right Image */}
+        <div
+          style={{
+            maxWidth: isMobile ? '100%' : '50%',
+            display: 'flex',
+            justifyContent: isMobile ? 'center' : 'flex-end',
+            alignItems: 'center',
+            transition: 'all 0.5s ease-in-out',
+            opacity: fade ? 1 : 0,
+            transform: fade ? 'translateX(0) scale(1)' : 'translateX(30px) scale(0.95)',
+          }}
+        >
+          <img
+            src={image}
+            alt={title}
+            style={{
+              width: isMobile ? '100%' : '90%',
+              height: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 20px 60px rgba(0,0,0,0.5))',
+              maxHeight: '600px',
+            }}
+          />
+        </div>
       </div>
 
-      {/* Animated particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
+      {/* Navigation Dots */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '40px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          gap: '12px',
+          zIndex: 2,
+        }}
+      >
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setFade(false);
+              setTimeout(() => {
+                setCurrentSlide(index);
+                setFade(true);
+              }, 300);
+            }}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${3 + Math.random() * 4}s`
+              width: index === currentSlide ? '40px' : '12px',
+              height: '12px',
+              borderRadius: '6px',
+              background: index === currentSlide ? 'white' : 'rgba(255,255,255,0.3)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              padding: 0,
+            }}
+            onMouseOver={(e) => {
+              if (index !== currentSlide) {
+                e.target.style.background = 'rgba(255,255,255,0.5)';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (index !== currentSlide) {
+                e.target.style.background = 'rgba(255,255,255,0.3)';
+              }
             }}
           />
         ))}
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
-          
-          {/* Scene counter */}
-          <div className={`transition-all duration-700 mb-6 translate-y-[-130px] ${
-            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-          }`}>
-            <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
-              <div className="flex space-x-1">
-                {scenes.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                      currentScene === index ? 'bg-white w-6' : 'bg-white/40'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+      {/* Decorative Elements */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          right: isMobile ? '-50px' : '-100px',
+          width: isMobile ? '200px' : '400px',
+          height: isMobile ? '200px' : '400px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(100,100,255,0.1) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none',
+        }}
+      />
 
-          {/* Main title */}
-          <div className={`transition-all duration-700 delay-100 mb-3 translate-y-[-100px] ${
-            isTransitioning ? 'opacity-0 scale-95 translate-y-8' : 'opacity-100 scale-100 translate-y-0'
-          }`}>
-            <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight ${currentSceneData.accentColor} drop-shadow-2xl`}>
-              {currentSceneData.title}
-            </h1>
-          </div>
-
-          {/* Subtitle */}
-          <div className={`transition-all duration-700 delay-200 mb-4 translate-y-[-80px] ${
-            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-          }`}>
-            <p className="text-lg sm:text-xl md:text-2xl font-light text-white/90 tracking-wide">
-              {currentSceneData.subtitle}
-            </p>
-          </div>
-
-          {/* Description */}
-          <div className={`transition-all duration-700 delay-300 mb-6 translate-y-[-90px] ${
-            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-          }`}>
-            <p className="text-sm sm:text-base text-white/70 max-w-xl mx-auto">
-              {currentSceneData.description}
-            </p>
-          </div>
-
-          {/* CTA Button */}
-          <div className={`transition-all duration-700 delay-400 mb-6 translate-y-[-60px] ${
-            isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-          }`}>
-            <button className="group relative px-8 py-3 bg-white text-black font-bold text-xs tracking-widest uppercase overflow-hidden rounded-full transition-all duration-500 hover:scale-105 hover:shadow-2xl">
-              <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
-                Explore Now
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-gray-900 to-zinc-900 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-full" />
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl rounded-full" />
-            </button>
-          </div>
-
-          {/* Brand tagline - Always visible */}
-          <div className="mt-4 translate-y-[-40px]">
-            <div className="relative inline-block">
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 blur-xl opacity-30 animate-pulse" />
-              <h2 className="relative text-base sm:text-lg md:text-xl font-light text-white tracking-wider">
-                Welcome to <span className="font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Athimart</span>
-              </h2>
-              <p className="relative text-xs sm:text-sm text-white/60 mt-1 tracking-widest">
-                The Future of Authentic Living
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Interactive scene navigation */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center space-x-4">
-          {scenes.map((scene, index) => (
-            <button
-              key={scene.id}
-              onClick={() => goToScene(index)}
-              disabled={isTransitioning}
-              className="group relative flex flex-col items-center transition-all duration-300 disabled:opacity-50"
-            >
-              {/* Scene thumbnail */}
-              <div className={`relative w-14 h-14 rounded-lg overflow-hidden border-2 transition-all duration-300 mb-1 ${
-                currentScene === index
-                  ? 'border-white scale-110 shadow-2xl'
-                  : 'border-white/30 scale-90 opacity-60 hover:opacity-100 hover:scale-100'
-              }`}>
-                <img
-                  src={scene.image}
-                  alt={scene.title}
-                  className="w-full h-full object-cover"
-                />
-                {currentScene === index && (
-                  <div className="absolute inset-0 border-2 border-white/50 animate-pulse" />
-                )}
-              </div>
-              
-              {/* Scene label */}
-              <span className={`text-[10px] font-medium tracking-wide transition-all duration-300 ${
-                currentScene === index ? 'text-white' : 'text-white/50'
-              }`}>
-                {scene.title.split(' ')[0]}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Progress bar with scene indicator */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-30">
-        <div
-          className="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-100 ease-linear relative"
-          style={{ width: `${progress}%` }}
-        >
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg animate-pulse" />
-        </div>
-      </div>
-
-      {/* Scene timer */}
-      <div className="absolute top-8 right-8 z-20">
-        <div className="flex items-center space-x-3 bg-black/30 backdrop-blur-md px-4 py-3 rounded-full border border-white/20">
-          <div className="relative w-8 h-8">
-            <svg className="transform -rotate-90" width="32" height="32">
-              <circle
-                cx="16"
-                cy="16"
-                r="14"
-                stroke="rgba(255,255,255,0.2)"
-                strokeWidth="2"
-                fill="none"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="14"
-                stroke="white"
-                strokeWidth="2"
-                fill="none"
-                strokeDasharray={`${2 * Math.PI * 14}`}
-                strokeDashoffset={`${2 * Math.PI * 14 * (1 - progress / 100)}`}
-                className="transition-all duration-100 ease-linear"
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-            </div>
-          </div>
-          <span className="text-white text-sm font-medium">
-            {currentScene + 1}/{scenes.length}
-          </span>
-        </div>
-      </div>
-
-      {/* Skip button */}
-      <button
-        onClick={() => goToScene((currentScene + 1) % scenes.length)}
-        className="absolute top-8 left-8 z-20 group px-6 py-3 bg-white/10 backdrop-blur-md text-white text-sm font-medium rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105"
+      {/* Powered by Tokilo Badge */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          fontSize: '0.75rem',
+          color: '#666',
+          background: 'rgba(255,255,255,0.05)',
+          padding: '8px 16px',
+          borderRadius: '20px',
+          border: '1px solid rgba(255,255,255,0.1)',
+        }}
       >
-        <span className="flex items-center space-x-2">
-          <span>Skip</span>
-          <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-          </svg>
-        </span>
-      </button>
-
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-100vh) translateX(50px);
-            opacity: 0;
-          }
-        }
-        .animate-float {
-          animation: float linear infinite;
-        }
-        .bg-gradient-radial {
-          background: radial-gradient(circle at center, var(--tw-gradient-stops));
-        }
-      `}</style>
-    </div>
+        Powered by Tokilo Technologies
+      </div>
+    </section>
   );
-}
+};
 
-export default VideoStoryHero;
+export default AthimartHeroBanner;
